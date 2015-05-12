@@ -5,24 +5,27 @@
  */
 package minesweeper;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Naima
  */
 public class MineSweeper implements IMineSweeper{
 
-    SquareBox[][] _board;
+    ISquareBox[][] _board;
     
     //for testing purpose, send board
-    public MineSweeper(SquareBox[][] board){
+    public MineSweeper(boolean[][] board){
         int row = board.length;
         int col = board[0].length;
-        _board = new SquareBox[row][col];
+        _board = new ISquareBox[row][col];
         for(int i = 0; i < row; i++){
             for(int j = 0; j < col; j++){
-                _board[i][j] = new SquareBox(i, j, board[i][j]._isMine);
+                _board[i][j] = new SquareBox(i, j, board[i][j], row, col);
             }
         }
+        SetAdjacentMines();
     }
     
     //create random board
@@ -36,12 +39,21 @@ public class MineSweeper implements IMineSweeper{
     }
     
     private void SetAdjacentMines(){
-        
+        for(ISquareBox[] boxes : _board){
+            for(ISquareBox box : boxes){
+                int numOfMines = 0;
+                for(IPosition pos : box.GetNeighbors()){
+                    if(_board[pos.GetRow()][pos.GetCol()].IsMine())
+                        numOfMines++;
+                }
+                box.SetAdjacentMines(numOfMines);
+            }
+        }
     }
 
     @Override
     public int GetAdjacentMines(int row, int col) {
-        return _board[row][col].getAdjacentMines();
+        return _board[row][col].GetAdjacentMines();
     }
 
     @Override
@@ -72,74 +84,12 @@ public class MineSweeper implements IMineSweeper{
     @Override
     public String ToString() {
         StringBuilder strB = new StringBuilder();
-        for(SquareBox[] boxes : _board){
-            for(SquareBox box : boxes){
+        for(ISquareBox[] boxes : _board){
+            for(ISquareBox box : boxes){
                 strB.append(box.ToString()).append(" ");
             }
             strB.append("\n");
         }
         return strB.toString();
-    }
-    
-    private class SquareBox{
-        private final int _row;
-        private final int _col;
-        private final boolean _isMine;
-        private int _neighborMines;
-        private boolean _isFlagged;
-        private boolean _isVisible;
-        
-        public SquareBox(int row, int col, boolean mine){
-            this._row = row;
-            this._col = col;
-            this._isMine = mine;
-            this._isFlagged = false;
-            this._isVisible = false;
-            this._neighborMines = 0;
-        }
-        
-        public int GetRow(){
-            return _row;
-        }
-        
-        public int GetCol(){
-            return _col;
-        }
-        
-        public boolean IsMine(){
-            return _isMine;
-        }
-        
-        public void SetVisible(){
-            _isVisible = true;
-        }
-        
-        public boolean IsVisible(){
-            return _isVisible;
-        }
-        
-        public void ToggleFlagged(){
-            _isFlagged = !_isFlagged;
-        }
-        
-        public boolean IsFlagged(){
-            return _isFlagged;
-        }
-        
-        public void SetAdjacentMines(int n){
-            _neighborMines = n;
-        }
-        
-        public int getAdjacentMines(){
-            return _neighborMines;
-        }
-        
-        public String ToString(){
-            if(_isMine)
-                return "*";
-            if (_neighborMines == 0)
-                return " ";
-            return Integer.toString(_neighborMines);
-        }
     }
 }
