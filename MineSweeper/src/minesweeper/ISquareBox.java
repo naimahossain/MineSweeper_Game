@@ -18,6 +18,8 @@ public interface ISquareBox {
     
     public int GetCol();
     
+    public void SetMine();
+    
     public boolean IsMine();
     
     public void SetVisible();

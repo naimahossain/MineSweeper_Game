@@ -12,23 +12,31 @@ import java.util.ArrayList;
  * @author Naima
  */
 public class SquareBox implements ISquareBox{
-    private final int _row;
-    private final int _col;
-    private final int _totalRow;
-    private final int _totalCol;
-    private final boolean _isMine;
-
+    private int _row;
+    private int _col;
+    private int _totalRow;
+    private int _totalCol;
     private int _neighborMines;
     private boolean _isFlagged;
     private boolean _isVisible;
+    private boolean _isMine;
     private ArrayList<IPosition> _neighbors;
 
     public SquareBox(int row, int col, boolean mine, int totalRow, int totalCol){
+        this._isMine = mine;
+        Init(row, col, totalRow, totalCol);
+    }
+    
+    public SquareBox(int row, int col, int totalRow, int totalCol){
+        this._isMine = false;
+        Init(row, col, totalRow, totalCol);
+    }
+    
+    private void Init(int row, int col, int totalRow, int totalCol){
         this._row = row;
         this._col = col;
         this._totalRow = totalRow;
         this._totalCol = totalCol;
-        this._isMine = mine;
         this._isFlagged = false;
         this._isVisible = false;
         this._neighborMines = 0;
@@ -59,6 +67,10 @@ public class SquareBox implements ISquareBox{
 
     public int GetCol(){
         return _col;
+    }
+    
+    public void SetMine(){
+        _isMine = true;
     }
 
     public boolean IsMine(){
