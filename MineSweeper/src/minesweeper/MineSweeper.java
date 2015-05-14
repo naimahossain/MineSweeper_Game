@@ -18,6 +18,7 @@ public class MineSweeper implements IMineSweeper{
     private int _totalMines;
     private int _totalVisibleBoxes;
     private int _totalBoxes;
+    private boolean _lost = false;
     
     //for testing purpose, send board
     public MineSweeper(boolean[][] board){
@@ -107,6 +108,7 @@ public class MineSweeper implements IMineSweeper{
     }
     
     private void Lost(){
+        _lost = true;
         for(ISquareBox[] boxes : _board){
             for(ISquareBox box : boxes){
                 if(box.IsMine() && !box.IsFlagged())
@@ -164,6 +166,11 @@ public class MineSweeper implements IMineSweeper{
         if(_collectedMines == _totalMines) return true;
         if(_totalVisibleBoxes == (_totalBoxes - _totalMines)) return true;
         return false;
+    }
+    
+    @Override
+    public boolean IsLost(){
+        return _lost;
     }
 
     @Override

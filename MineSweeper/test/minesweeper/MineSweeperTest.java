@@ -180,6 +180,31 @@ public class MineSweeperTest {
     }
 
     /**
+     * Test of IsWin method, of class MineSweeper.
+     */
+    @Test
+    public void testIsLost() {
+        System.out.println("IsLost");
+        InitBoard();
+        //0 1 2 2 1
+        //0 1 x x 2
+        //0 1 3 x 2
+        assertEquals(false, _mineSweeper.IsLost());
+        _mineSweeper.ToggleFlagged(1, 2);
+        _mineSweeper.ToggleFlagged(1, 3);
+        _mineSweeper.ToggleFlagged(2, 3);
+        assertEquals(false, _mineSweeper.IsLost());
+        
+        assertEquals(false, _mineSweeper.IsLost());
+        _mineSweeper.Click(0, 0);
+        _mineSweeper.Click(0, 2);
+        assertEquals(false, _mineSweeper.IsLost());
+        
+        _mineSweeper.ToggleFlagged(2, 3);
+        _mineSweeper.Click(2, 3);
+        assertEquals(true, _mineSweeper.IsLost());
+    }
+    /**
      * Test of ToString method, of class MineSweeper.
      */
     @Test

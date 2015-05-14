@@ -25,6 +25,8 @@ public interface IMineSweeper {
     
     public boolean IsWin();
     
+    public boolean IsLost();
+    
     public String ToString();
     
 }
