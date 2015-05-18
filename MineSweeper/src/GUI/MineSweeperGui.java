@@ -12,10 +12,6 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -26,7 +22,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 
 /**
  *
@@ -117,63 +112,29 @@ public class MineSweeperGui extends JFrame implements IMineSweeperGui{
     
     private JMenuBar GetMenuBar(){
         JMenuItem newGame = new JMenuItem("New Game");
-        newGame.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                _main.InitGame();
-            }
-        });
+        newGame.addActionListener(new InitGameActionListener(new MainActions(_main)));
         JMenuItem options = new JMenuItem("Options");
         options.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                Options options = new Options();
-                options.addWindowListener(new WindowListener(){
-
-                    @Override
-                    public void windowOpened(WindowEvent e) {
-                    }
-
-                    @Override
-                    public void windowClosing(WindowEvent e) {
-                    }
-
-                    @Override
-                    public void windowClosed(WindowEvent e) {
-                        _main.InitGame();
-                    }
-
-                    @Override
-                    public void windowIconified(WindowEvent e) {
-                    }
-
-                    @Override
-                    public void windowDeiconified(WindowEvent e) {
-                    }
-
-                    @Override
-                    public void windowActivated(WindowEvent e) {
-                    }
-
-                    @Override
-                    public void windowDeactivated(WindowEvent e) {
-                    }
-                });
+                Options options = new Options(_main);
             }
         });
         JMenu game = new JMenu("Game");
         game.add(newGame);
         game.add(options);
         
+        JMenuItem how2 = new JMenuItem("How To");
+        how2.addActionListener(new HelpActionListener());
+        JMenuItem about = new JMenuItem("About");
+        about.addActionListener(new AboutActionListener());
         JMenu help = new JMenu("Help");
-        help.addMenuListener(new HelpActionListener());
-        JMenu about = new JMenu("About");
-        about.addMenuListener(new AboutActionListener());
+        help.add(how2);
+        help.add(about);
         
         JMenuBar menuBar = new JMenuBar();
         menuBar.add(game);
         menuBar.add(help);
-        menuBar.add(about);
         setJMenuBar(menuBar);
         return menuBar;
     } 
@@ -190,34 +151,7 @@ public class MineSweeperGui extends JFrame implements IMineSweeperGui{
         for(int i = 0; i < _rows ; i++){
             for(int j = 0; j < _cols; j++){
                 _boxes[i][j] = new BoxButton(i, j);
-                _boxes[i][j].addMouseListener(new MouseListener() {
-
-                    @Override
-                    public void mouseClicked(MouseEvent e) {
-                        BoxButton b = (BoxButton)e.getSource();
-                        int clickCount = e.getClickCount();
-                        if(SwingUtilities.isLeftMouseButton(e) )
-                            _main.Click(b.GetRow(), b.GetCol(), clickCount);
-                        else
-                            _main.ToggleFlag(b.GetRow(), b.GetCol());
-                    }
-
-                    @Override
-                    public void mousePressed(MouseEvent e) {
-                    }
-
-                    @Override
-                    public void mouseReleased(MouseEvent e) {
-                    }
-
-                    @Override
-                    public void mouseEntered(MouseEvent e) {
-                    }
-
-                    @Override
-                    public void mouseExited(MouseEvent e) {
-                    }
-                });
+                _boxes[i][j].addMouseListener(new MouseClickListener(new MainActions(_main))); 
                 _buttonPanel.add(_boxes[i][j]);
             }
         }

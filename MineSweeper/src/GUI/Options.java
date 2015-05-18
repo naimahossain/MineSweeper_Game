@@ -5,6 +5,7 @@
  */
 package GUI;
 
+import controller.MineSweeperMain;
 import controller.Values;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
@@ -25,6 +26,8 @@ public class Options extends javax.swing.JFrame {
     /**
      * Creates new form Options
      */
+    
+    private final MineSweeperMain _main;
     
     private JTextField _tRows;
     private JTextField _tCols;
@@ -83,7 +86,8 @@ public class Options extends javax.swing.JFrame {
         setVisible(true);
     }
     
-    public Options() {
+    public Options(final MineSweeperMain main) {
+        _main = main;
         Values.SetDefault();
         SetFrame();
     } 
@@ -138,6 +142,7 @@ public class Options extends javax.swing.JFrame {
             this._optionWindow = window;
         }
 
+        @Override
         public void actionPerformed(ActionEvent arg0) {
             try {
                 int r = Integer.parseInt(_tRows.getText());
@@ -149,6 +154,7 @@ public class Options extends javax.swing.JFrame {
                     Values.Mines = m;
                 } else
                     throw new NumberFormatException();
+                _optionWindow.addWindowListener(new InitGameActionListener(new MainActions(_main)));
                 _optionWindow.dispose();
             } catch (NumberFormatException nfe) {
             JOptionPane

@@ -6,24 +6,24 @@
 package GUI;
 
 import java.awt.Container;
-import javax.swing.JMenu;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.event.MenuEvent;
-import javax.swing.event.MenuListener;
 
 /**
  *
  * @author Naima
  */
-class HelpActionListener implements MenuListener {
+class HelpActionListener implements ActionListener {
 
     public HelpActionListener() {
     }
 
     @Override
-    public void menuSelected(MenuEvent e) {
-        JMenu helpMenu = (JMenu)e.getSource();
-        Container container = helpMenu.getParent();
+    public void actionPerformed(ActionEvent e) {
+        JMenuItem helpMenu = (JMenuItem)e.getSource();
+        Container container = helpMenu.getParent().getParent();
         JOptionPane.showMessageDialog(container,
             "To start, click a tile.\n" +
             "\n" +
@@ -42,15 +42,6 @@ class HelpActionListener implements MenuListener {
             "probably lined up beside that row. If a square says 8, every surrounding square is mined.\n" +
             "3. Explore the unexplored. Not sure where to click next? Try clearing some unexplored territory.\n" + 
             "You're better off clicking in the middle of unmarked squares than in an area you suspect is mined.");
-        helpMenu.setSelected(false);
-    }
-
-    @Override
-    public void menuDeselected(MenuEvent e) {
-    }
-
-    @Override
-    public void menuCanceled(MenuEvent e) {
     }
     
 }
