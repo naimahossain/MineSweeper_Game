@@ -65,14 +65,14 @@ public class MineSweeperTest {
 
         assertEquals(0, _mineSweeper.GetAdjacentMines(1, 0));
         assertEquals(1, _mineSweeper.GetAdjacentMines(1, 1));
-        assertEquals(2, _mineSweeper.GetAdjacentMines(1, 2)); 
-        assertEquals(2, _mineSweeper.GetAdjacentMines(1, 3));
+        assertEquals(-1, _mineSweeper.GetAdjacentMines(1, 2)); //for mines the value is -1
+        assertEquals(-1, _mineSweeper.GetAdjacentMines(1, 3));
         assertEquals(2, _mineSweeper.GetAdjacentMines(1, 4));
 
         assertEquals(0, _mineSweeper.GetAdjacentMines(2, 0));
         assertEquals(1, _mineSweeper.GetAdjacentMines(2, 1));
         assertEquals(3, _mineSweeper.GetAdjacentMines(2, 2));
-        assertEquals(2, _mineSweeper.GetAdjacentMines(2, 3));
+        assertEquals(-1, _mineSweeper.GetAdjacentMines(2, 3));
         assertEquals(2, _mineSweeper.GetAdjacentMines(2, 4));
     }
 
@@ -145,6 +145,23 @@ public class MineSweeperTest {
         _mineSweeper.Click(0, 2);
         assertEquals(true, _mineSweeper.IsVisible(0, 2));
         assertEquals(false, _mineSweeper.IsVisible(0, 3));
+        
+        _mineSweeper.DoubleClick(0, 2);
+        assertEquals(true, _mineSweeper.IsVisible(0, 3));
+        assertEquals(true, _mineSweeper.IsVisible(1, 2));
+        assertEquals(true, _mineSweeper.IsVisible(1, 3));
+        assertEquals(true, _mineSweeper.IsLost());
+        
+        InitBoard();
+        _mineSweeper.Click(0, 0);
+        _mineSweeper.ToggleFlagged(1, 2);
+        _mineSweeper.ToggleFlagged(1, 3);
+        assertEquals(false, _mineSweeper.IsVisible(0, 2));
+        _mineSweeper.Click(0, 2);
+        assertEquals(true, _mineSweeper.IsVisible(0, 2));
+        _mineSweeper.DoubleClick(0, 2);
+        assertEquals(true, _mineSweeper.IsVisible(0, 3));
+        assertEquals(false, _mineSweeper.IsVisible(1, 2));
         assertEquals(false, _mineSweeper.IsVisible(1, 3));
     }
 
@@ -214,7 +231,7 @@ public class MineSweeperTest {
         //0 1 2 2 1
         //0 1 x x 2
         //0 1 3 x 2
-        String res = "  1 2 2 1 \n" + "  1 * * 2 \n" + "  1 3 * 2 \n";
+        String res = "0 1 2 2 1 \n" + "0 1 * * 2 \n" + "0 1 3 * 2 \n";
         assertEquals(res, _mineSweeper.ToString());
     }
 }

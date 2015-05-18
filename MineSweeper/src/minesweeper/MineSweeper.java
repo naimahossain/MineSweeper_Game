@@ -5,6 +5,7 @@
  */
 package minesweeper;
 
+import java.util.ArrayList;
 import java.util.Stack;
 
 /**
@@ -14,11 +15,11 @@ import java.util.Stack;
 public class MineSweeper implements IMineSweeper{
 
     private ISquareBox[][] _board;
-    private int _collectedMines; 
     private int _totalMines;
     private int _totalVisibleBoxes;
     private int _totalBoxes;
-    private boolean _lost = false;
+    private boolean _lost;
+    private static MineSweeper _obj;
     
     //for testing purpose, send board
     public MineSweeper(boolean[][] board){
@@ -29,6 +30,7 @@ public class MineSweeper implements IMineSweeper{
     private void InitBoard(boolean[][] board){
         int row = board.length;
         int col = board[0].length;
+        _totalMines = 0;
         _board = new ISquareBox[row][col];
         for(int i = 0; i < row; i++){
             for(int j = 0; j < col; j++){
@@ -40,13 +42,25 @@ public class MineSweeper implements IMineSweeper{
     }
     
     //create random board
-    public MineSweeper(int mines, int row, int col){
+    private MineSweeper(){
+        
+    }
+    
+    private void InitGame(int row, int col, int mines){
         InitBoard(row, col);
         SetMines(mines, row, col);
         Init();
     }
     
+    public static MineSweeper GetObject(int row, int col, int mines){
+        if(_obj == null)
+            _obj = new MineSweeper();
+        _obj.InitGame(row, col, mines);
+        return _obj;
+    }
+    
     private void InitBoard(int row, int col){
+        _totalBoxes = row * col;
         _board = new ISquareBox[row][col];
         for(int i = 0; i < row; i++){
             for(int j = 0; j < col; j++)
@@ -55,71 +69,91 @@ public class MineSweeper implements IMineSweeper{
     }
     
     private void SetMines(int mines, int row, int col){
-        int numOfMines = 0;
-        while(numOfMines < mines){
+        _totalMines = 0;
+        while(_totalMines < mines){
             int x = (int)Math.floor(Math.random() * row);
             int y = (int)Math.floor(Math.random() * col);
             if(_board[x][y].IsMine()) continue;
-            numOfMines++;
+            _totalMines++;
             _board[x][y].SetMine();
         }
     }
     
     private void Init(){
-        _collectedMines = 0;
+        _lost = false;
+        _totalVisibleBoxes = 0;
         SetAdjacentMines();
     }
     
     @Override
-    public void Click(int row, int col) {
+    public ArrayList<IPosition> Click(int row, int col) {
         ISquareBox box = _board[row][col];
+        ArrayList<IPosition> updatedBoxes = new ArrayList<>();
         if(box.IsVisible() || box.IsFlagged())
-            return;
+            return updatedBoxes;
         if(box.IsMine()){
-            Lost();
-            return;
+            updatedBoxes.addAll(Lost());
+            return updatedBoxes;
         }
         int neighborMines = box.GetAdjacentMines();
         if(neighborMines > 0){
             box.SetVisible();
+            updatedBoxes.add(new Position(box.GetRow(), box.GetCol()));
             _totalVisibleBoxes++;
         }
         else
-            Expand(box);
+            updatedBoxes.addAll(Expand(box));
+        return updatedBoxes;
     }
     
-    private void Expand(ISquareBox box){
+    private ArrayList<IPosition> Expand(ISquareBox box){
+        ArrayList<IPosition> expandedBoxes = new ArrayList<>();
         Stack stack = new Stack();
         box.SetVisible();
+        expandedBoxes.add(new Position(box.GetRow(), box.GetCol()));
         _totalVisibleBoxes++;
         stack.push(box);
-        while(!stack.isEmpty()){
-            ISquareBox curBox = (ISquareBox)stack.pop();
-            if(curBox.GetAdjacentMines() == 0){
-                for(IPosition pos : curBox.GetNeighbors()){
-                    ISquareBox nBox = _board[pos.GetRow()][pos.GetCol()];
-                    if(nBox.IsFlagged() || nBox.IsVisible() || nBox.IsMine()) continue;
-                    nBox.SetVisible();
-                    _totalVisibleBoxes++;
-                    stack.push(nBox);
-                }
-            }
-        }
+        expandedBoxes.addAll(Expand(stack));
+        return expandedBoxes;
     }
     
-    private void Lost(){
-        _lost = true;
-        for(ISquareBox[] boxes : _board){
-            for(ISquareBox box : boxes){
-                if(box.IsMine() && !box.IsFlagged())
-                    box.SetVisible();
+    private ArrayList<IPosition> Expand(Stack stack){
+        ArrayList<IPosition> expandedBoxes = new ArrayList<>();
+        while(!stack.isEmpty()){
+            ISquareBox curBox = (ISquareBox)stack.pop();
+            if(curBox.GetAdjacentMines() != 0) continue;
+            for(IPosition pos : curBox.GetNeighbors()){
+                ISquareBox nBox = _board[pos.GetRow()][pos.GetCol()];
+                if(nBox.IsFlagged() || nBox.IsVisible() || nBox.IsMine()) continue;
+                nBox.SetVisible();
+                expandedBoxes.add(pos);
+                _totalVisibleBoxes++;
+                stack.push(nBox);
             }
         }
+        return expandedBoxes;
+    }
+    
+    private ArrayList<IPosition> Lost(){
+        _lost = true;
+        ArrayList<IPosition> mineBoxes = new ArrayList<>();
+        for(ISquareBox[] boxes : _board){
+            for(ISquareBox box : boxes){
+                if((!box.IsMine() || box.IsFlagged()) && (!box.IsFlagged() || box.IsMine()))continue;
+                mineBoxes.add(new Position(box.GetRow(), box.GetCol()));
+                box.SetVisible();
+            }
+        }
+        return mineBoxes;
     }
     
     private void SetAdjacentMines(){
         for(ISquareBox[] boxes : _board){
             for(ISquareBox box : boxes){
+                if(box.IsMine()){
+                    box.SetAdjacentMines(-1);
+                    continue;
+                }
                 int numOfMines = 0;
                 for(IPosition pos : box.GetNeighbors()){
                     if(_board[pos.GetRow()][pos.GetCol()].IsMine())
@@ -128,6 +162,31 @@ public class MineSweeper implements IMineSweeper{
                 box.SetAdjacentMines(numOfMines);
             }
         }
+    }
+    
+    @Override
+    public ArrayList<IPosition> DoubleClick(int row, int col){
+        ISquareBox box = _board[row][col];
+        int neighborMines = box.GetAdjacentMines();
+        ArrayList<IPosition> updatedBoxes = new ArrayList<>();
+        if(!box.IsVisible() || box.IsFlagged() || neighborMines<=0)
+            return updatedBoxes;
+        
+        Stack stack = new Stack();
+        stack.push(box);
+        box.GetNeighbors().stream().forEach((neighbor)->{
+            ISquareBox nBox = _board[neighbor.GetRow()][neighbor.GetCol()];
+            if(!nBox.IsFlagged() && !nBox.IsVisible()) {
+                if(nBox.IsMine())
+                    updatedBoxes.addAll(Lost());
+                nBox.SetVisible();
+                updatedBoxes.add(neighbor);
+                _totalVisibleBoxes++;
+                stack.push(nBox);
+            }    
+        });
+        updatedBoxes.addAll(Expand(stack));
+        return updatedBoxes;
     }
 
     @Override
@@ -144,10 +203,6 @@ public class MineSweeper implements IMineSweeper{
     public void ToggleFlagged(int row, int col){
         ISquareBox box = _board[row][col];
         if(box.IsVisible()) return;
-        if(box.IsFlagged() && box.IsMine()) 
-            _collectedMines--;
-        else if((!box.IsFlagged()) && box.IsMine())
-            _collectedMines++;
         box.ToggleFlagged();
     }
 
@@ -163,7 +218,6 @@ public class MineSweeper implements IMineSweeper{
 
     @Override
     public boolean IsWin() {
-        if(_collectedMines == _totalMines) return true;
         if(_totalVisibleBoxes == (_totalBoxes - _totalMines)) return true;
         return false;
     }

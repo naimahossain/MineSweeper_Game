@@ -5,13 +5,17 @@
  */
 package minesweeper;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Naima
  */
 public interface IMineSweeper {
     
-    public void Click(int row, int col);
+    public ArrayList<IPosition> Click(int row, int col);
+    
+    public ArrayList<IPosition> DoubleClick(int row, int col);
     
     public int GetAdjacentMines(int row, int col);
     

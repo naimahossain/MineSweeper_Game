@@ -3,19 +3,19 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package minesweeper;
+package GUI;
 
 /**
  *
  * @author Naima
  */
-public class MineSweeperMain {
+public interface IBoxButton {
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        // TODO code application logic here
-    }
-    
+    public int GetCol();
+
+    public int GetRow();
+
+    public void SetVisible(int v);
+
+    public void ToggleFlag();
 }

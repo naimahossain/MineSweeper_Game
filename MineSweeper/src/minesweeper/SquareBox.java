@@ -104,8 +104,6 @@ public class SquareBox implements ISquareBox{
     public String ToString(){
         if(_isMine)
             return "*";
-        if (_neighborMines == 0)
-            return " ";
         return Integer.toString(_neighborMines);
     }
 }
