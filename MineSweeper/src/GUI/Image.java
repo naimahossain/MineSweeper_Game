@@ -15,8 +15,6 @@ import javax.swing.ImageIcon;
 public class Image {
     
     private static Image _obj;
-    private static final String baseDir = System.getProperty("user.dir") + File.separator + "src" +
-            File.separator + "GUI" + File.separator + "Images" + File.separator;
     
     public ImageIcon UNCLICKED;
     public ImageIcon BLANK;
@@ -50,25 +48,25 @@ public class Image {
     }
     
     private void SetImageIcons(){
-        UNCLICKED = new ImageIcon(baseDir + "unclicked.GIF");
-        BLANK = new ImageIcon(baseDir + "blank.GIF");
-        MINE = new ImageIcon(baseDir + "mine.GIF");
-        ONE = new ImageIcon(baseDir + "one.GIF");
-        TWO = new ImageIcon(baseDir + "two.GIF");
-        THREE = new ImageIcon(baseDir + "three.GIF");
-        FOUR = new ImageIcon(baseDir + "four.GIF");
-        FIVE = new ImageIcon(baseDir + "five.GIF");
-        SIX = new ImageIcon(baseDir + "six.GIF");
-        SEVEN = new ImageIcon(baseDir + "seven.GIF");
-        EIGHT = new ImageIcon(baseDir + "eight.GIF");
-        FLAG = new ImageIcon(baseDir + "flag.GIF");
-        EXPLODED = new ImageIcon(baseDir + "exploded.GIF");
-        NOTMINE = new ImageIcon(baseDir + "notmine.GIF");
-        YELLOWFACE = new ImageIcon(baseDir + "yellowface.GIF");
-        DEADFACE = new ImageIcon(baseDir + "deadface.GIF");
-        SUNGLASSFACE = new ImageIcon(baseDir + "sunglassface.GIF");
-        HAPPY = new ImageIcon(baseDir + "happy_yippee.GIF");
-        SAD = new ImageIcon(baseDir + "Sad.GIF");
+        UNCLICKED = new ImageIcon(Image.class.getResource("Images/unclicked.GIF"));
+        BLANK = new ImageIcon(Image.class.getResource("Images/blank.GIF"));
+        MINE = new ImageIcon(Image.class.getResource("Images/mine.GIF"));
+        ONE = new ImageIcon(Image.class.getResource("Images/one.GIF"));
+        TWO = new ImageIcon(Image.class.getResource("Images/two.GIF"));
+        THREE = new ImageIcon(Image.class.getResource("Images/three.GIF"));
+        FOUR = new ImageIcon(Image.class.getResource("Images/four.GIF"));
+        FIVE = new ImageIcon(Image.class.getResource("Images/five.GIF"));
+        SIX = new ImageIcon(Image.class.getResource("Images/six.GIF"));
+        SEVEN = new ImageIcon(Image.class.getResource("Images/seven.GIF"));
+        EIGHT = new ImageIcon(Image.class.getResource("Images/eight.GIF"));
+        FLAG = new ImageIcon(Image.class.getResource("Images/flag.GIF"));
+        EXPLODED = new ImageIcon(Image.class.getResource("Images/exploded.GIF"));
+        NOTMINE = new ImageIcon(Image.class.getResource("Images/notmine.GIF"));
+        YELLOWFACE = new ImageIcon(Image.class.getResource("Images/yellowface.GIF"));
+        DEADFACE = new ImageIcon(Image.class.getResource("Images/deadface.GIF"));
+        SUNGLASSFACE = new ImageIcon(Image.class.getResource("Images/sunglassface.GIF"));
+        HAPPY = new ImageIcon(Image.class.getResource("Images/HappyDance.gif"));
+        SAD = new ImageIcon(Image.class.getResource("Images/big-cry.gif"));
     }
 }
 

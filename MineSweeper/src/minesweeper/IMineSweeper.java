@@ -21,7 +21,7 @@ public interface IMineSweeper {
     
     public boolean IsFlagged(int row, int col);
     
-    public void ToggleFlagged(int row, int col);
+    public boolean ToggleFlagged(int row, int col);
     
     public boolean IsMine(int row, int col);
     

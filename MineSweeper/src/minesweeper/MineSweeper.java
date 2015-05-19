@@ -200,10 +200,11 @@ public class MineSweeper implements IMineSweeper{
     }
     
     @Override
-    public void ToggleFlagged(int row, int col){
+    public boolean ToggleFlagged(int row, int col){
         ISquareBox box = _board[row][col];
-        if(box.IsVisible()) return;
+        if(box.IsVisible()) return false;
         box.ToggleFlagged();
+        return true;
     }
 
     @Override

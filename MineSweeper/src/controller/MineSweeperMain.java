@@ -78,8 +78,8 @@ public class MineSweeperMain {
     public void ToggleFlag(int row, int col){
         InitiateClick();
         
-        _gameControl.ToggleFlagged(row, col);
-        _gui.ToggleFlagged(row, col);
+        if(_gameControl.ToggleFlagged(row, col))
+            _gui.ToggleFlagged(row, col);
         
         int n = Integer.parseInt(_gui.GetFlagLeft());
         n = _gameControl.IsFlagged(row, col)? n-1: n+1;
