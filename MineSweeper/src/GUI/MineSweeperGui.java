@@ -102,7 +102,7 @@ public class MineSweeperGui extends JFrame implements IMineSweeperGui{
         _flagsLeft = new JTextField("" + _mines);
         _flagsLeft.setColumns(3);
         _flagsLeft.setEditable(false);
-        _yellowFace = new JButton(Image.YELLOWFACE);
+        _yellowFace = new JButton(Image.GetObj().YELLOWFACE);
         JPanel scoreTray = new JPanel();
         scoreTray.add(_clock);
         scoreTray.add(_yellowFace);
@@ -201,14 +201,14 @@ public class MineSweeperGui extends JFrame implements IMineSweeperGui{
 
     @Override
     public void Win() {
-        _yellowFace.setIcon(Image.SUNGLASSFACE);
-        ShowUpdate("Congratulation. You won the game.","Game Win", Image.HAPPY);
+        _yellowFace.setIcon(Image.GetObj().SUNGLASSFACE);
+        ShowUpdate("Congratulation. You won the game.","Game Win", Image.GetObj().HAPPY);
     }
     
     @Override
     public void Lost(){
-        _yellowFace.setIcon(Image.DEADFACE);
-        ShowUpdate("Sorry. You lost the game.","Game Lost", Image.SAD);
+        _yellowFace.setIcon(Image.GetObj().DEADFACE);
+        ShowUpdate("Sorry. You lost the game.","Game Lost", Image.GetObj().SAD);
     }
     
     private void ShowUpdate(String msg, String title, ImageIcon icon){

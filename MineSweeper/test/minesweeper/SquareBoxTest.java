@@ -156,7 +156,7 @@ public class SquareBoxTest {
         bx.SetAdjacentMines(3);
         assertEquals("3", bx.ToString());
         bx.SetAdjacentMines(0);
-        assertEquals(" ", bx.ToString());
+        assertEquals("0", bx.ToString());
         bx.SetMine();
         assertEquals("*", bx.ToString());
     }

@@ -176,7 +176,7 @@ public class MineSweeperTest {
         _mineSweeper.ToggleFlagged(1, 2);
         _mineSweeper.ToggleFlagged(1, 3);
         _mineSweeper.ToggleFlagged(2, 3);
-        assertEquals(true, _mineSweeper.IsWin());
+        assertEquals(false, _mineSweeper.IsWin());
         
         //0 1 2 2 1
         //0 1 x x 2

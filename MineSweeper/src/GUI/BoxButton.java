@@ -21,7 +21,7 @@ public class BoxButton extends JButton implements IBoxButton{
         _row = row;
         _col = col;
         _flagged = false;
-        setIcon(Image.UNCLICKED);
+        setIcon(Image.GetObj().UNCLICKED);
     }
     
     @Override
@@ -37,39 +37,39 @@ public class BoxButton extends JButton implements IBoxButton{
     @Override
     public void SetVisible(int v){
         if(_flagged && v>-1){
-            this.setIcon(Image.NOTMINE);
+            this.setIcon(Image.GetObj().NOTMINE);
             return;
         }
         switch(v){
             case -1:
-                this.setIcon(Image.EXPLODED);
+                this.setIcon(Image.GetObj().EXPLODED);
                 break;
             case 0:
-                this.setIcon(Image.BLANK);
+                this.setIcon(Image.GetObj().BLANK);
                 break;
             case 1:
-                this.setIcon(Image.ONE);
+                this.setIcon(Image.GetObj().ONE);
                 break;
             case 2:
-                this.setIcon(Image.TWO);
+                this.setIcon(Image.GetObj().TWO);
                 break;
             case 3:
-                this.setIcon(Image.THREE);
+                this.setIcon(Image.GetObj().THREE);
                 break;
             case 4:
-                this.setIcon(Image.FOUR);
+                this.setIcon(Image.GetObj().FOUR);
                 break;
             case 5:
-                this.setIcon(Image.FIVE);
+                this.setIcon(Image.GetObj().FIVE);
                 break;
             case 6:
-                this.setIcon(Image.SIX);
+                this.setIcon(Image.GetObj().SIX);
                 break;
             case 7:
-                this.setIcon(Image.SEVEN);
+                this.setIcon(Image.GetObj().SEVEN);
                 break;
             case 8:
-                this.setIcon(Image.EIGHT);
+                this.setIcon(Image.GetObj().EIGHT);
                 break;
         }
     } 
@@ -77,9 +77,9 @@ public class BoxButton extends JButton implements IBoxButton{
     @Override
     public void ToggleFlag(){
         if(_flagged)
-            this.setIcon(Image.UNCLICKED);
+            this.setIcon(Image.GetObj().UNCLICKED);
         else
-            this.setIcon(Image.FLAG);
+            this.setIcon(Image.GetObj().FLAG);
             
         _flagged = !_flagged;
     }
